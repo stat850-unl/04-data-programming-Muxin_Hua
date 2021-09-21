@@ -22,10 +22,11 @@ create table Mar_2020 as
 		where month='March'& year='2020';
 quit;
 
-/*Ranking the data and print the top 10*/
-proc rank data=Mar_2020 out=result ties=low descending;
-var avg;
-ranks avg_rank;
-run;
-proc print data=result(where=(avg_rank<=10));
+/*Sorting the data and print the top 10*/
+proc sort data=Mar_2020 out=sorted;
+	by descending avg;
+	run;
+proc print data=sorted(obs=10);
+ var gamename avg year month; 
+ title 'top 10 by avg';
 run;
