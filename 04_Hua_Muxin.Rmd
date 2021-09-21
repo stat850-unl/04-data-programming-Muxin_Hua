@@ -91,6 +91,7 @@ head(games)
 ```
 #### Build a new dataset to include the information for needed games
 ```{r}
+library(lubridate)
 plot_game <-data.frame()
 
 plot_names <- c('Counter-Strike: Global Offensive', 'Stardew Valley', 'Tabletop Simulator', 'Team Fortress 2')
@@ -106,16 +107,19 @@ plot_game[(plot_game$gamename=='Counter-Strike: Global Offensive'& plot_game$yea
 ```
 #### Create a variable **date** storing *ymd* type data
 ```{r}
-library(lubridate)
-
 plot_game$month_ <- paste(plot_game$year,match(plot_game$month,month.name),'01')
 
 plot_game$date <- ymd(plot_game$month_)
 ```
+#### Keeping the data after 2016 for replicating the plot
+```{r}
+plot_game_2016 <- plot_game[plot_game$year>=2016,]
+```
+
 #### Plot lineplots relabel x-axes with *break*.
 ```{r}
 library(ggplot2)
-ggplot(data=plot_game,
+ggplot(data=plot_game_2016,
        aes(x=date, y=avg,
            group=gamename, color=gamename, shape=gamename))+
   geom_line()+
@@ -123,7 +127,7 @@ ggplot(data=plot_game,
   ylab('Average')+
   scale_x_date(name='Date', date_breaks = '1 year', date_labels = '%Y', date_minor_breaks = '1 year', expand = c(0,0))
 
-# scale_x_date(breaks = break_x)
+
 ```
 
 
